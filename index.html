@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>kucatat · catatan manis untuk harimu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+<span class="orn" style="top:8%;left:4%">✦</span><span class="orn" style="top:20%;right:6%;animation-delay:-2s">🐾</span>
+<span class="orn" style="top:55%;left:2%;animation-delay:-4s">♡</span><span class="orn" style="top:75%;right:3%;animation-delay:-1s">✦</span>
+<span class="orn" style="top:90%;left:12%;animation-delay:-3s">☁</span><span class="orn" style="top:40%;right:1%;animation-delay:-5s">♡</span>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" class="cat" aria-hidden="true"><path d="M6 6l12 8H30L42 6v22a18 18 0 0 1-36 0z" fill="#FFD6E7" stroke="#6b4a63" stroke-width="2.5" stroke-linejoin="round"/><circle cx="17" cy="27" r="2.3" fill="#6b4a63"/><circle cx="31" cy="27" r="2.3" fill="#6b4a63"/><path d="M21 32q3 3 6 0" stroke="#6b4a63" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="32" r="3" fill="#ffb3cf" opacity=".7"/><circle cx="36" cy="32" r="3" fill="#ffb3cf" opacity=".7"/></svg>
+      <div><h1>kucatat</h1><small>catatan manis untuk harimu</small></div>
+    </div>
+    <div class="clock"><b id="clock">00:00:00</b><small id="today-label"></small></div>
+  </header>
+
+  <div class="bar">
+    <nav class="tabs">
+      <button class="tab active" data-view="notes">📒 Catatan</button>
+      <button class="tab" data-view="cal">🗓️ Kalender</button>
+    </nav>
+    <div class="tools">
+      <div class="search"><i class="uil uil-search"></i><input id="search" placeholder="Cari catatan…"></div>
+      <select id="filter">
+        <option value="All">Semua</option><option value="General">Umum</option><option value="Work">Pekerjaan</option>
+        <option value="Personal">Pribadi</option><option value="Ideas">Ide</option><option value="Archived">Diarsipkan</option>
+      </select>
+      <button class="round" id="theme" title="Ganti tema">🌙</button>
+      <div class="menu-wrap">
+        <button class="round" id="menu-btn" title="Lainnya"><i class="uil uil-ellipsis-v"></i></button>
+        <div class="menu" id="menu">
+          <button id="export"><i class="uil uil-export"></i> Ekspor catatan</button>
+          <button id="import"><i class="uil uil-import"></i> Impor catatan</button>
+          <button id="arc-view"><i class="uil uil-archive"></i> Lihat arsip</button>
+          <button id="notif"><i class="uil uil-bell"></i> Aktifkan notifikasi</button>
+          <input type="file" id="import-file" accept=".json" hidden>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section id="view-notes" class="view"><div class="grid" id="grid"></div></section>
+    <section id="view-cal" class="view" hidden>
+      <div class="cal-card">
+        <div class="cal-head"><button class="round" id="prev">‹</button><h2 id="cal-title"></h2><button class="round" id="next">›</button><button class="pill" id="goto-today">Hari ini</button></div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+      <div class="day-head"><h2 id="day-title"></h2><button class="pill primary" id="add-day">＋ Catatan di tanggal ini</button></div>
+      <div class="grid" id="day-list"></div>
+    </section>
+  </main>
+</div>
+
+<button class="fab" id="fab" title="Catatan baru (Ctrl+Alt+N)">＋</button>
+
+<!-- Form catatan -->
+<div class="overlay" id="popup">
+  <form class="modal" id="form">
+    <div class="m-head"><h2 id="popup-title"> Catatan baru</h2><button type="button" class="x" data-close>✕</button></div>
+    <input id="note-title" placeholder="Judul catatan" autocomplete="off">
+    <div class="row">
+      <select id="category"><option value="General">Umum</option><option value="Work">Pekerjaan</option><option value="Personal">Pribadi</option><option value="Ideas">Ide</option></select>
+      <div class="colors" id="colors"></div>
+    </div>
+    <div class="row">
+      <label class="fld">📅 Tanggal<input type="date" id="note-date" required></label>
+      <label class="fld">⏰ Jam alarm
+        <span class="alarm-line"><input type="checkbox" id="alarm-on"><input type="time" id="alarm-time" disabled></span>
+      </label>
+    </div>
+    <div class="toolbar">
+      <button type="button" data-cmd="bold" title="Tebal"><i class="uil uil-bold"></i></button>
+      <button type="button" data-cmd="italic" title="Miring"><i class="uil uil-italic"></i></button>
+      <button type="button" data-cmd="underline" title="Garis bawah"><i class="uil uil-underline"></i></button>
+      <button type="button" data-cmd="insertUnorderedList" title="Daftar"><i class="uil uil-list-ul"></i></button>
+      <button type="button" data-cmd="insertOrderedList" title="Daftar nomor"><i class="uil uil-list-ol"></i></button>
+    </div>
+    <div id="note-content" contenteditable="true" data-ph="Tulis catatanmu di sini…"></div>
+    <div class="actions"><button type="button" class="pill" data-close>Batal</button><button type="submit" class="pill primary">💾 Simpan</button></div>
+  </form>
+</div>
+
+<!-- Detail -->
+<div class="overlay" id="detail"><div class="modal" id="detail-box"></div></div>
+
+<!-- Alarm -->
+<div class="overlay" id="alarm-modal">
+  <div class="modal alarm-box">
+    <div class="bell">⏰</div><h2>Waktunya!</h2>
+    <h3 id="alarm-title"></h3><p id="alarm-body"></p>
+    <div class="actions" style="justify-content:center"><button class="pill" id="snooze">😴 Tunda 5 menit</button><button class="pill primary" id="stop">✓ Selesai</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
